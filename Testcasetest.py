@@ -10,5 +10,9 @@ class TestListElements(unittest.TestCase):
         """Will succeed"""
         self.assertCountEqual(self.result, self.expected)
 
+    def test_list_eq(self):
+        """Will fail"""
+        self.assertListEqual(self.result, self.expected)
+
 if __name__ == "__main__":
     unittest.main()
