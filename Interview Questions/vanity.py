@@ -22,7 +22,6 @@ def vanity(codes, numbers):
         res = ''
         for m in range(len(lowerCode)):
             res = res + str(letters2nums(lowerCode[m]))
-        print(res)
         return res
 
     answer = []
@@ -32,9 +31,9 @@ def vanity(codes, numbers):
             if nums in numbers[j] and numbers[j] not in answer:
                 answer.append(numbers[j])
 
-    return
+    return sorted(answer)
 
 if __name__ == '__main__':
     codes = ['ABCD', 'GGGG']
-    numbers = ['+12318787', '+11442223', '+12231133', '+12444411', '+19944441']
+    numbers = ['+12318787', '+19944441', '+11442223', '+12231133', '+12444411']
     print(vanity(codes, numbers))
