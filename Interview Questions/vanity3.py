@@ -1,5 +1,3 @@
-import pprint
-
 # Write your code here
 
 def vanity(codes, numbers):
@@ -10,7 +8,7 @@ def vanity(codes, numbers):
             print('Code', c + 1, 'must consist of 1 to 15 uppercase letters--', codes[c])
             error += 1
     for n in range(len(numbers)):
-        if numbers[n][0] != '+' or len(numbers[n]) >= 17:
+        if numbers[n][0] != '+' or len(numbers[n]) >= 17 or numbers[n][1:].isnumeric() == False:
             print('Phone number', n + 1, 'must start with a + followed by no more than 15 numbers to be valid (E.164 format)--', numbers[n])
             error += 1
     if error != 0:
@@ -19,8 +17,6 @@ def vanity(codes, numbers):
 
 
     def code2nums(code):  # This part of the code maps our alpha characters to a numeric value
-        # alpha = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz'
-        # transform = '2222223333334444445555556666667777777788888899999999'
         alpha = 'abcdefghijklmnopqrstuvwxyz'
         transform = '22233344455566677778889999'
         res = ''
@@ -28,38 +24,37 @@ def vanity(codes, numbers):
             res += transform[alpha.index(a)]  # We then look at the same index in our transform and add it to our result
         return res
 
+    #dictionary of the values
     def append_value(dict_obj, key, value):
-        if key in dict_obj:
-            if not isinstance(dict_obj[key], list):
+        if key in dict_obj:     # Check that our phone number is already in our dictionary
+            if not isinstance(dict_obj[key], list):     # append our new transformed phone number
                 dict_obj[key] = [dict_obj[key]]
             dict_obj[key].append(value)
-        else:
+        else:       # If phone number isn't in dictionary add it with our transformed phone number
             dict_obj[key] = value
 
     answer = {}# blank list of numbers we plan on returning
     for i in range(len(codes)):  # reference each code
         nums = code2nums(codes[i])  # define our code as numbers
         for j in range(len(numbers)):  # iterate through the possible phone numbers
-            if nums in numbers[j]:
+            if nums in numbers[j]:      # checks that or code is in the phone number
                 count = 0
                 start = 0
-                while start < len(numbers[j]):
+                while start < len(numbers[j]):      # goes through our phone number looking for multiple possibilities of the code
                     pos = numbers[j].find(nums, start)
                     if pos != -1:
-                        replacement = numbers[j][:pos] + codes[i] + numbers[j][pos+len(nums):]
-                        append_value(answer, numbers[j], replacement)
+                        replacement = numbers[j][:pos] + codes[i] + numbers[j][pos+len(nums):]      # locates code spot in in our phone number and replaces the letters
+                        append_value(answer, numbers[j], replacement)       #uses the code to append it to our dictionary
                         start = pos +1
                         count += 1
                     else:
                         break
-
-    pprint.pprint(answer)
-    return answer  # sorted answers
+    return sorted(answer)  # Replace sorted(answer) with just answer to see the dictionary
 
 
 if __name__ == '__main__':
     codes = ['ABCD', 'GGGG']
     #numbers = ['+124444411']
-    numbers = ['+119944441', '+22234444', '+11442223', '+12231133', '+124444411']
+    numbers = ['+11a9944441', '+22234444', '+11442223', '+12231133', '+124444411']
     print(vanity(codes, numbers))
 
